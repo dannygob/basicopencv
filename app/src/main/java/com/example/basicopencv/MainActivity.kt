@@ -12,36 +12,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.basicopencv.ui.theme.BasicOpenCVTheme
+import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import org.opencv.android.OpenCVLoader
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            BasicOpenCVTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            OpenCVInitializer()
+            Greeting(name = "Android")
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun OpenCVInitializer() {
+    val isOpenCVLoaded = remember { OpenCVLoader.initDebug() }
+
+    LaunchedEffect(Unit) {
+        if (!isOpenCVLoaded) {
+            Log.e("OpenCV", "Error al cargar OpenCV")
+        } else {
+            Log.d("OpenCV", "OpenCV cargado correctamente")
+        }
+    }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    BasicOpenCVTheme {
-        Greeting("Android")
-    }
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
 }
