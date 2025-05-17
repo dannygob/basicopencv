@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "BasicOpenCV"
 include(":app")
-include(":sdk")
+include(":OpenCVModule")
